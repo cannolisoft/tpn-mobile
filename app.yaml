@@ -1,0 +1,27 @@
+application: tpnmdm
+version: 2
+runtime: python
+api_version: 1
+
+
+handlers:
+
+- url: /tasks/.*
+  script: tasks.py
+  login: admin
+
+- url: /
+  static_files: index.html
+  upload: index.html
+  expiration: "30d"
+
+- url: /images
+  static_dir: images
+  expiration: "365d"
+
+- url: /css
+  static_dir: css
+  expiration: "365d"
+
+- url: /.*
+  script: main.py
