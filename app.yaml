@@ -23,5 +23,21 @@ handlers:
   static_dir: css
   expiration: "365d"
 
+- url: /admin/.*
+  script: $PYTHON_LIB/google/appengine/ext/admin
+  login: admin
+
 - url: /.*
   script: main.py
+
+admin_console:
+  pages:
+  - name: My Console
+    url: /admin/interactive
+  - name: My Memcache
+    url: /admin/memcache
+  - name: My XMPP
+    url: /admin/xmpp
+  - name: My Inbound Mail
+    url: /admin/inboundmail
+
