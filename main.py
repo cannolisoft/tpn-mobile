@@ -21,20 +21,19 @@ class OfficesHandler(webapp.RequestHandler):
         self.response.out.write(template.render(path, template_values))
 
     def getOffices(self):
-        offices = memcache.get('offices')
-        if not offices:
-            offices_query = models.Office.all().order('name')
-            offices = offices_query.fetch(100)
-            memcache.add('offices', offices)
-        else:
-            logging.info('cache hit offices')
+        offices_html = memcache.get('offices html')
+        if not offices_html:
+            offices = models.Office.all().order('name')
+            template_values = {
+                'offices': offices
+            }
 
-        template_values = {
-            'offices': offices
-        }
+            path = os.path.join(os.path.dirname(__file__), 'templates/offices.html')
+            offices_html = template.render(path, template_values)
 
-        path = os.path.join(os.path.dirname(__file__), 'templates/offices.html')
-        self.response.out.write(template.render(path, template_values))
+            memcache.add('offices html', offices_html)
+
+        self.response.out.write(offices_html)
 
 
     def get(self, officeid):
@@ -57,20 +56,18 @@ class DocHandler(webapp.RequestHandler):
 
 
     def getDocs(self):
-        docs = memcache.get('docs')
-        if not docs:
-            docs_query = models.Doc.all().order('name')
-            docs = docs_query.fetch(100)
-            memcache.add('docs', docs)
-        else:
-            logging.info('cache hit docs')
+        docs_html = memcache.get('docs html')
+        if not docs_html:
+            docs = models.Doc.all().order('name')
+            template_values = {
+                'docs': docs
+            }
+            path = os.path.join(os.path.dirname(__file__), 'templates/docs.html')
+            docs_html = template.render(path, template_values)
 
-        template_values = {
-            'docs': docs
-        }
+            memcache.add('docs html', docs_html)
 
-        path = os.path.join(os.path.dirname(__file__), 'templates/docs.html')
-        self.response.out.write(template.render(path, template_values))
+        self.response.out.write(docs_html)
 
     def get(self, docid):
         if docid:
